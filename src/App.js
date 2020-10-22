@@ -8,6 +8,8 @@ import { auth } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProfileInfo from "./ProfileInfo";
+import Explore from "./Explore";
+import Header from "./Header";
 
 function App() {
   const [{user}, dispatch] = useStateValue();
@@ -43,6 +45,11 @@ function App() {
 
           <Route path="/profile_info">
             <ProfileInfo />
+          </Route>
+
+          <Route path="/explore">
+            <Header/>
+            <Explore />
           </Route>
 
           <Route exact path="/">

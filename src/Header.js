@@ -1,5 +1,7 @@
+import { auth } from "./firebase";
 import React, { useState } from "react";
-import  { Link } from "react-router-dom";
+import  { Link, useHistory } from "react-router-dom";
+import { useStateValue } from "./StateProvider";
 
 import {
   Nav,
@@ -15,13 +17,17 @@ import {
   
 } from "reactstrap";
 
+
 const Header = (props) => {
+  const [{ user }] = useStateValue();
+  const history = useHistory();
+  const email = user?.email;
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
   return (
-    <div className="feed">
+    <div style={{marginBottom:"12.8vh"}} className="feed">
       <div className="feed__header fixed-top bg-primary">
         <Nav
           tabs
@@ -37,7 +43,7 @@ const Header = (props) => {
             </DropdownToggle>
             <DropdownMenu>
 
-               <DropdownItem header>Md Rabiul</DropdownItem> 
+               <DropdownItem header> {email} </DropdownItem> 
              
                <Link className="text-decoration-none"><DropdownItem>View Profile</DropdownItem></Link>
                <Link className="text-decoration-none" to="/profile_info"><DropdownItem>Update Profile</DropdownItem></Link>
@@ -45,6 +51,11 @@ const Header = (props) => {
               <DropdownItem divider />             
               <DropdownItem>Setting</DropdownItem>
               <DropdownItem>Language</DropdownItem>
+              {
+               user ? (
+              <DropdownItem onClick={() => auth.signOut()}>Log out</DropdownItem>
+               ):(  history.push("/"))
+              }
             </DropdownMenu>
           </Dropdown>
           <NavItem>

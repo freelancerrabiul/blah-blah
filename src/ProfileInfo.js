@@ -2,25 +2,27 @@ import React from "react";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { db, storage} from "./firebase";
+import { db, storage } from "./firebase";
 import firebase from "firebase";
 import "./ProfileInfo.css";
 import { useStateValue } from "./StateProvider";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+
 
 function ProfileInfo() {
   const [{ user }] = useStateValue();
 
   let history = useHistory();
-  const email = user?.email;
+  const email = user?.email;  
   const [fn, setFn] = useState("");
   const [ln, setLn] = useState("");
   const [about, setAbout] = useState("");
   const [bday, setBday] = useState("");
   const [gender, setGender] = useState("");
   const [image, setImage] = useState(null);
-  const [progress, setProgress] = useState(0)
+  const [progress, setProgress] = useState(0);
 
- 
   const sendDataTodb = () => {
     db.collection("users")
       .doc(`${email}`)
@@ -55,46 +57,45 @@ function ProfileInfo() {
     history.push("/feed");
   };
 
-const handleChange = (e) => {
-    if(e.target.files[0]) {
-      setImage(e.target.files[0])
+  const handleChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
     }
-}
-
-const handleUpload = () => {
- const uploadTask = storage.ref(`image/${image.name}`).put(image)
-  uploadTask.on(
-    "stateChanged",
-    (snapshot) => {
-      const progress = Math.round(
-        (snapshot.bytesTransferred / snapshot.totalBytes)*100
-      );
-      setProgress(progress);
-    },
-  (error) => {
-    //Error handle
-    alert(error.message);
-  },
-  () => {
-    //final function...
-    storage
-    .ref("image")
-    .child(image.name)
-    .getDownloadURL()
-    .then(url => {
-     db.collection("users")
-      .doc(`${email}`)
-      .set(
-        {
-          profilePhoto: url
-        },
-        { merge: true }
-      )
-    })
-
-  }
-  )
-}
+  };
+  const handleUpload = () => {
+    const uploadTask = storage.ref(`images/${image.name}`).put(image);
+    //  the progress bar--->
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        //progress func..
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(progress);
+      },
+      (error) => {
+        //Error func...
+        console.log(error);
+        alert(error.message);
+      },
+      () => {
+        //complete function...
+        storage
+          .ref("images")
+          .child(image.name)
+          .getDownloadURL()
+          .then((url) => {            
+            //post image get inside of db
+            db.collection("users").doc(`${email}`).update({
+              profilePic: url,
+            });
+            setProgress(0);
+            setImage(null);
+          });
+      }
+    );
+  };
 
   return (
     <div className="container profileInfo  bg-light align-items-sm-center ">
@@ -142,15 +143,18 @@ const handleUpload = () => {
                 id="exampleText"
               />
               <Label for="exampleFile">Profile Photo</Label>
-              <Input onChange={handleChange} type="file" name="file" id="exampleFile" />
-               <button onClick={handleUpload} style={{margin:"5px"}} className="btn btn-small btn-outline-primary">Upload</button>
-              <div className="progress mt-2">
-                <div
-                  className="progress-bar progress-bar-striped"
-                  value={progress}
-                  max = "100"           
-                 
-                ></div>
+
+              <div className="imageupload">
+                <div className="w-25 p-3">
+                  <CircularProgressbar                    
+                    value={progress}
+                    maxValue={100}
+                    text={`${progress * 1}%`}
+                  />
+                </div>
+
+                <input type="file" onChange={handleChange} />
+                <Button onClick={handleUpload}>Upload</Button>
               </div>
 
               <legend style={{ fontSize: "medium" }}>Gender</legend>
