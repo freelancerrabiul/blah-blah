@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import React, { useEffect } from "react";
 import "./App.css";
 import Login from "./Login";
@@ -12,7 +17,7 @@ import Explore from "./Explore";
 import Header from "./Header";
 
 function App() {
-  const [{user}, dispatch] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
 
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
@@ -34,6 +39,7 @@ function App() {
   return (
     <Router>
       <div className="app">
+        <Header />
         <Switch>
           <Route exact path="/feed">
             <Feed />
@@ -48,7 +54,6 @@ function App() {
           </Route>
 
           <Route path="/explore">
-            <Header/>
             <Explore />
           </Route>
 

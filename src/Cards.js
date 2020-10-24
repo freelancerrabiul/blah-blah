@@ -1,33 +1,31 @@
 import React from "react";
-import {
-  Card,
-  Button,
-  CardImg,
-  CardTitle,
-  CardText,
-  CardDeck,
-  CardSubtitle,
-  CardBody,
-  CardColumns,
-} from "reactstrap";
+import "./Cards.css";
+import { CardImg, CardTitle, CardText, CardBody } from "reactstrap";
 
 const Cards = ({ email, firstname, lastname, about, profilePic }) => {
   return (
-    <div className="container-fluid">
-      <Card>
-        <CardImg top width="100%" src={profilePic} alt="Loading" />
+    <div className="column">
+      <div className="card shadow">
+        <CardImg
+          className="cards__img"
+          top
+          width="100%"
+          src={profilePic}
+          alt="Loading..."
+        />
         <CardBody>
-          <CardTitle>
+          <CardTitle className="shadow">
             {" "}
-            {firstname} {lastname}
+            {firstname}
+            {lastname}{" "}
           </CardTitle>
-          <CardSubtitle>{email}</CardSubtitle>
-          <CardText>{about}</CardText>
-          <button className=" btn btn-block btn-outline-info font-weight-bold">
+          {/* <CardSubtitle> {email} </CardSubtitle> */}
+          <CardText className="cards__text">{email}</CardText>
+          <button className="btn btn-block btn-sm btn-outline-info">
             Connect
           </button>
         </CardBody>
-      </Card>
+      </div>
     </div>
   );
 };

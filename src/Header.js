@@ -1,98 +1,128 @@
 import { auth } from "./firebase";
 import React, { useState } from "react";
-import  { Link, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useStateValue } from "./StateProvider";
+import "./Header.css";
 
 import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
   Nav,
   NavItem,
-  Dropdown,
-  DropdownItem,
+  UncontrolledDropdown,
   DropdownToggle,
-  DropdownMenu,  
-  InputGroup,
-  InputGroupAddon,
-  Input,
-  Button,
-  
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
-
 
 const Header = (props) => {
   const [{ user }] = useStateValue();
   const history = useHistory();
   const email = user?.email;
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const toggle = () => setDropdownOpen(!dropdownOpen);
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <div style={{marginBottom:"12.8vh"}} className="feed">
-      <div className="feed__header fixed-top bg-primary">
-        <Nav
-          tabs
-          style={{
-            background: "rgb(40, 62, 75, 1)",
-            padding: "5px",
-            fontSize:"medium"
-          }}
-        >
-          <Dropdown nav isOpen={dropdownOpen} toggle={toggle}>
-            <DropdownToggle nav caret>
-             My Profile
-            </DropdownToggle>
-            <DropdownMenu>
+    <div className="feed">
+      <div className="feed__header fixed-top">
+        <Navbar className="bg-custom" light expand="md">
+          <NavbarToggler onClick={toggle} />
+          <Collapse isOpen={isOpen} navbar>
+            <Nav className="mr-auto" navbar>
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle
+                  nav
+                  caret
+                  className="nav-link font-weight-bold text-dark"
+                >
+                  Options
+                </DropdownToggle>
+                <DropdownMenu left>
+                  <DropdownItem header> {email} </DropdownItem>
+                  <Link className="text-decoration-none">
+                    <DropdownItem>View Profile</DropdownItem>
+                  </Link>
 
-               <DropdownItem header> {email} </DropdownItem> 
-             
-               <Link className="text-decoration-none"><DropdownItem>View Profile</DropdownItem></Link>
-               <Link className="text-decoration-none" to="/profile_info"><DropdownItem>Update Profile</DropdownItem></Link>
-            
-              <DropdownItem divider />             
-              <DropdownItem>Setting</DropdownItem>
-              <DropdownItem>Language</DropdownItem>
-              {
-               user ? (
-              <DropdownItem onClick={() => auth.signOut()}>Log out</DropdownItem>
-               ):(  history.push("/"))
-              }
-            </DropdownMenu>
-          </Dropdown>
-          <NavItem>
-            <Link className="nav-link" style={{ color: "white" }} to="/feed">
-              Home
-            </Link>
-          </NavItem>
-          <NavItem>
-            <Link className="nav-link" style={{ color: "white" }} to="/mynetwork">
-              My network
-            </Link>
-          </NavItem>
-          <NavItem>
-            <Link className="nav-link" style={{ color: "white" }} to="/messaging">
-              Messaging
-            </Link>
-          </NavItem>
-          <NavItem>
-            <Link className="nav-link" style={{ color: "white" }} to="/notification">
-              Notifiations
-            </Link>
-          </NavItem>
-          <NavItem>
-            <Link className="nav-link" style={{ color: "white" }} to="/explore">
-              Explore
-            </Link>
-          </NavItem>
+                  <Link className="text-decoration-none" to="/profile_info">
+                    <DropdownItem>Update Profile</DropdownItem>
+                  </Link>
 
-          <NavItem> 
-              <InputGroup >
-                <Input style={{backgroundColor:"#e1e8ee",marginLeft:"15px", paddingLeft:"45px"}} placeholder="type..." />
-                <InputGroupAddon addonType="append">
-                  <Button color="primary">Search</Button>
-                </InputGroupAddon>
-              </InputGroup>  
-          </NavItem>
-        </Nav>
+                  <DropdownItem divider />
+                  <DropdownItem>Setting</DropdownItem>
+                  <DropdownItem>Language</DropdownItem>
+                  {user ? (
+                    <DropdownItem onClick={() => auth.signOut()}>
+                      Log out
+                    </DropdownItem>
+                  ) : (
+                    history.push("/")
+                  )}
+                </DropdownMenu>
+              </UncontrolledDropdown>
+
+              <NavItem>
+                <Link
+                  className="nav-link font-weight-bold text-dark"
+                  to="/feed"
+                >
+                  Home
+                </Link>
+              </NavItem>
+              <Link
+                className="nav-link font-weight-bold text-dark"
+                to="/mynetwork"
+              >
+                My network
+              </Link>
+
+              <NavItem>
+                <Link
+                  className="nav-link font-weight-bold text-dark"
+                  to="/messaging"
+                >
+                  Messaging
+                </Link>
+              </NavItem>
+
+              <NavItem>
+                <Link
+                  className="nav-link font-weight-bold text-dark"
+                  to="/notification"
+                >
+                  Notifiations
+                </Link>
+              </NavItem>
+
+              <NavItem>
+                <Link
+                  className="nav-link font-weight-bold text-dark"
+                  to="/explore"
+                >
+                  Explore
+                </Link>
+              </NavItem>
+
+              <NavItem>
+                <form class="form-inline">
+                  <input
+                    class="form-control mr-sm-2"
+                    type="search"
+                    placeholder="Search"
+                    aria-label="Search"
+                  />
+                  <button
+                    class="btn btn-outline-success my-2 my-sm-0"
+                    type="submit"
+                  >
+                    Search
+                  </button>
+                </form>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
       </div>
     </div>
   );

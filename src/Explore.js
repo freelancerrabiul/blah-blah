@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "reactstrap";
+
 import Cards from "./Cards";
 import { db } from "./firebase";
-import "./Explore.css"
+import "./Explore.css";
 
 import { useStateValue } from "./StateProvider";
 
@@ -25,23 +25,43 @@ function Explore() {
   let peopleLength = peoples.length;
   if (peopleLength) {
     return (
-      <div className="explore ">
-        {peoples.map(({ id, people }) => (
-          <Cards
-            key={id}
-            email={email}
-            firstname={people.firstname}
-            lastname={people.lastname}
-            about={people.about}
-            profilePic={people.profilePic}
-          />
-        ))}
+      <div class="container">
+        <div class="row">
+          <div class="col exploreTo__cards">
+            {peoples.map(({ id, people }) => (
+              <Cards
+                key={id}
+                email={email}
+                firstname={people.firstname}
+                lastname={people.lastname}
+                about={people.about}
+                profilePic={people.profilePic}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     );
   } else {
     return (
-      <div className="">
-        <h1>Hello</h1>
+      <div class="loader">
+        <div class="loader-inner">
+          <div class="loader-line-wrap">
+            <div class="loader-line"></div>
+          </div>
+          <div class="loader-line-wrap">
+            <div class="loader-line"></div>
+          </div>
+          <div class="loader-line-wrap">
+            <div class="loader-line"></div>
+          </div>
+          <div class="loader-line-wrap">
+            <div class="loader-line"></div>
+          </div>
+          <div class="loader-line-wrap">
+            <div class="loader-line"></div>
+          </div>
+        </div>
       </div>
     );
   }

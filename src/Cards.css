@@ -1,13 +1,19 @@
-
-.cards{
-
- 
-
+.column {
+  float: left;
+  width: 33.33%;
+}
+.card {
+  display: flex; 
+  margin: 10px;
  
 }
-
-/* <--------------------------------------------------------> */
-
+.cards__img {
+  height: 180px;
+  object-fit: cover;
+}
 .btn {
-  outline-style: none !important;
+  outline-style: none;
+}
+.cards__text {
+ 
 }
