@@ -1,74 +1,19 @@
-<Nav
-  tabs
-  style={{
-    background: "rgb(40, 62, 75, 1)",
+<Button
+                  style={{ outlineStyle: "none" }}
+                  className="feed_button btn-block border-0"
+                  variant="outlined"
+                  role="button"
+                >
+                  <PostAddIcon />
 
-    fontSize: "medium",
-  }}
->
-  <Dropdown nav isOpen={dropdownOpen} toggle={toggle}>
-    <DropdownToggle nav caret>
-      My Profile
-    </DropdownToggle>
-    <DropdownMenu>
-      <DropdownItem header> {email} </DropdownItem>
-
-      <Link className="text-decoration-none">
-        <DropdownItem>View Profile</DropdownItem>
-      </Link>
-      <Link className="text-decoration-none" to="/profile_info">
-        <DropdownItem>Update Profile</DropdownItem>
-      </Link>
-
-      <DropdownItem divider />
-      <DropdownItem>Setting</DropdownItem>
-      <DropdownItem>Language</DropdownItem>
-      {user ? (
-        <DropdownItem onClick={() => auth.signOut()}>Log out</DropdownItem>
-      ) : (
-        history.push("/")
-      )}
-    </DropdownMenu>
-  </Dropdown>
-  <NavItem>
-    <Link className="nav-link" style={{ color: "white" }} to="/feed">
-      Home
-    </Link>
-  </NavItem>
-  <NavItem>
-    <Link className="nav-link" style={{ color: "white" }} to="/mynetwork">
-      My network
-    </Link>
-  </NavItem>
-  <NavItem>
-    <Link className="nav-link" style={{ color: "white" }} to="/messaging">
-      Messaging
-    </Link>
-  </NavItem>
-  <NavItem>
-    <Link className="nav-link" style={{ color: "white" }} to="/notification">
-      Notifiations
-    </Link>
-  </NavItem>
-  <NavItem>
-    <Link className="nav-link" style={{ color: "white" }} to="/explore">
-      Explore
-    </Link>
-  </NavItem>
-
-  <NavItem>
-    <InputGroup>
-      <Input
-        style={{
-          backgroundColor: "#e1e8ee",
-          marginLeft: "15px",
-          paddingLeft: "45px",
-        }}
-        placeholder="type..."
-      />
-      <InputGroupAddon addonType="append">
-        <Button color="primary">Search</Button>
-      </InputGroupAddon>
-    </InputGroup>
-  </NavItem>
-</Nav>;
+                  <span
+                    className="feed__buttonSpan
+                     btn-block text-left
+                     pull-left border-0
+                     font-weight-bold 
+                     rounded-0 text-muted
+                     text-capitalize"
+                  >
+                    {" "}
+                    Start a Post
+                  </span>

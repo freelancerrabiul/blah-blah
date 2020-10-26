@@ -1,0 +1,19 @@
+.feed__postIcon {
+    background-color: #fff;
+}
+.feed__postIcon:hover {
+    background-color: #f1f1f1;
+    
+}
+.feed__postTextArea {
+    outline-style: none;
+    background-color: #fafafa;
+}
+.feed__modalIcon > .MuiSvgIcon-root {
+  font-size: 30px !important;
+  color: green;
+ 
+}
+.feed__modalIcon:hover {
+    border-radius: 50% !important;
+}
