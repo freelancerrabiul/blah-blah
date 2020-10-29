@@ -41,7 +41,7 @@ const Header = (props) => {
                 </DropdownToggle>
                 <DropdownMenu left>
                   <DropdownItem header> {email} </DropdownItem>
-                  <Link className="text-decoration-none">
+                  <Link to="/view_profile" className="text-decoration-none">
                     <DropdownItem>View Profile</DropdownItem>
                   </Link>
 

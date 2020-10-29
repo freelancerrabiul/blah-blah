@@ -3,6 +3,14 @@ import "./Cards.css";
 import { CardImg, CardTitle, CardText, CardBody } from "reactstrap";
 
 const Cards = ({ email, firstname, lastname, about, profilePic }) => {
+
+  const sendDataToMyConnection = () => {
+   
+ 
+
+  }
+
+
   return (
     <div className="column">
       <div className="card shadow">
@@ -14,14 +22,14 @@ const Cards = ({ email, firstname, lastname, about, profilePic }) => {
           alt="Loading..."
         />
         <CardBody>
-          <CardTitle className="shadow">
+          <CardTitle>
             {" "}
             {firstname}
             {lastname}{" "}
           </CardTitle>
-          {/* <CardSubtitle> {email} </CardSubtitle> */}
+
           <CardText className="cards__text">{email}</CardText>
-          <button className="btn btn-block btn-sm btn-outline-info">
+          <button onClick={sendDataToMyConnection} className="btn btn-block btn-sm btn-outline-info">
             Connect
           </button>
         </CardBody>

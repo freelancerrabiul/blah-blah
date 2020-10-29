@@ -4,11 +4,11 @@ import Cards from "./Cards";
 import { db } from "./firebase";
 import "./Explore.css";
 
-import { useStateValue } from "./StateProvider";
+
 
 function Explore() {
-  const [{ user }] = useStateValue();
-  const email = user?.email;
+
+ 
   const [peoples, setPeoples] = useState([]);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ function Explore() {
       );
     });
   }, []);
-
+// console.log(peoples);
   let peopleLength = peoples.length;
   if (peopleLength) {
     return (
@@ -31,7 +31,7 @@ function Explore() {
             {peoples.map(({ id, people }) => (
               <Cards
                 key={id}
-                email={email}
+                email={people.email}
                 firstname={people.firstname}
                 lastname={people.lastname}
                 about={people.about}

@@ -4,12 +4,12 @@ import { IconButton } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { db } from "./firebase";
 import firebase from "firebase";
-import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ThumbDownOutlinedIcon from "@material-ui/icons/ThumbDownOutlined";
 import "./Post.css";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import ThumbDownOutlinedIcon from "@material-ui/icons/ThumbDownOutlined";
+import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
+// import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+// import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+// import FavoriteIcon from "@material-ui/icons/Favorite";
 
 import {
   Card,
@@ -25,9 +25,16 @@ function Post({ username, user, postId, caption, imageUrl, profileUrl }) {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
-  // const [like, setLike] = useState([]);
-  const [dbLike, setDbLike] = useState([]);
-  console.log("--->database likes", dbLike);
+  const [likes, setLikes] = useState([]);
+  const [like, setLike] = useState("");
+  
+  const [disLikes, setDisLikes] = useState([]);
+  const [disLike, setDisLike] = useState("");
+
+  // console.log("this is likes-->", likes.length);
+
+  let likesLength = likes.length;
+  let disLikesLength = disLikes.length;
   // --------making comments handliner in db start--
   useEffect(() => {
     let unsubscribe;
@@ -39,6 +46,40 @@ function Post({ username, user, postId, caption, imageUrl, profileUrl }) {
         .orderBy("timestamp", "desc")
         .onSnapshot((snapshot) => {
           setComments(snapshot.docs.map((doc) => doc.data()));
+        });
+    }
+    return () => {
+      unsubscribe();
+    };
+  }, [postId]);
+
+  useEffect(() => {
+    let unsubscribe;
+    if (postId) {
+      unsubscribe = db
+        .collection("posts")
+        .doc(postId)
+        .collection("likes")
+        .orderBy("timestamp", "desc")
+        .onSnapshot((snapshot) => {
+          setLikes(snapshot.docs.map((doc) => doc.data()));
+        });
+    }
+    return () => {
+      unsubscribe();
+    };
+  }, [postId]);
+
+  useEffect(() => {
+    let unsubscribe;
+    if (postId) {
+      unsubscribe = db
+        .collection("posts")
+        .doc(postId)
+        .collection("dislikes")
+        .orderBy("timestamp", "desc")
+        .onSnapshot((snapshot) => {
+          setDisLikes(snapshot.docs.map((doc) => doc.data()));
         });
     }
     return () => {
@@ -58,87 +99,31 @@ function Post({ username, user, postId, caption, imageUrl, profileUrl }) {
     });
     setComment("");
   };
-  // --------Posting comment to individual post start--
 
-  // possting likes to nvidual post start----------------
-
-  // possting likes to nvidual post end------------------
-  const [counter, setCounter] = useState([]);
-
-  // useEffect(() => {
-  //   let unsubscribe;
-  //   if (postId) {
-  //     unsubscribe = db
-  //       .collection("posts")
-  //       .doc(postId)
-  //       .collection("likes")
-  //       .onSnapshot((snapshot) => {
-  //         setLike(snapshot.docs.map((doc) => doc.data()));
-  //       });
-  //   }
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [postId]);
-
-  useEffect(() => {
-    let unsubscribe;
-    if (postId) {
-      db.collection("posts")
-        .doc(postId)
-        .collection("likes")
-        .doc(postId)
-        .get()
-        .then((doc) => {
-          setDbLike(doc.data());
-        });
-    } else {
-    }
-  }, [postId]);
-  let databaseLikes = dbLike?.like;
-  // console.log("likes-->", bbc);
-
-  // function count() {
-  //   let counter = bbc;
-  //   counter++;
-  //   setCounter(counter);
-  //   db.collection("posts").doc(postId).collection("likes").doc(postId).set(
-  //     {
-  //       like: counter,
-  //     },
-  //     { merge: true }
-  //   );
-  // }
-  const [liked, setLiked] = useState(false);
-  console.log(liked);
-
-  // const[postLike,setPostLike] = useState("")
-  // console.log(postLike);
-
-  let likes = databaseLikes;
-  const handleSetLikeToTrue = (e) => {
-    e.preventDefault();
-
-    db.collection("posts").doc(postId).collection("likes").doc(postId).set(
-      {
-        like: likes + 1,
-      },
-      { merge: true }
-    );
-
-    setLiked(true);
+  // possting likes to invidual post start----------------
+  const postLike = (event) => {
+    event.preventDefault();
+    db.collection("posts").doc(postId).collection("likes").doc(`${user}`).set({
+      username: user,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    setLike("");
   };
 
-  const handleSetLikeToFalse = (e) => {
-    e.preventDefault();
-    db.collection("posts").doc(postId).collection("likes").doc(postId).set(
-      {
-        like: likes 
-      },
-      { merge: true }
-    );
-    setLiked(false);
+  // posting disLikes to invidual post start----------------
+  const postDisLike = (event) => {
+    event.preventDefault();
+    db.collection("posts")
+      .doc(postId)
+      .collection("dislikes")
+      .doc(`${user}`)
+      .set({
+        username: user,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    setDisLike("");
   };
+
   return (
     <div className="container">
       <Card className="rounded-0 shadow">
@@ -158,18 +143,40 @@ function Post({ username, user, postId, caption, imageUrl, profileUrl }) {
 
         <CardBody>
           <CardText className="font-weight-bold">{caption}</CardText>
-
           <CardLink>
-            {liked ? (
-              <ThumbUpIcon fontSize="large" onClick={handleSetLikeToFalse} />
-            ) : (
+            {/* --------------------------like button and input Start */}
+
+            <Button
+              color="primary"
+              onClick={postLike}
+              style={{ outlineStyle: "none", textTransform: "capitalize" }}
+            >
               <ThumbUpAltOutlinedIcon
-                fontSize="large"
-                onClick={handleSetLikeToTrue}
-              />
-            )}
-              <input type="text" value={liked ? likes + 1 : likes} />
-            {/* <input type="text" value={liked ? likes + 1 : likes} />  */}
+                style={{ color: "green" }}
+                className="post__likeButton"
+              ></ThumbUpAltOutlinedIcon>
+              <span className="badge" style={{ fontSize: "small" }}>
+                {likesLength}{" "}
+              </span>
+            </Button>
+            {/* --------------------------dislike button and input Start*/}
+            <Button
+              onClick={postDisLike}
+              // onClick={handleDisLike}
+              style={{ outlineStyle: "none", textTransform: "capitalize" }}
+              color="primary"
+            >
+              {" "}
+              <ThumbDownOutlinedIcon
+                style={{ color: "orange" }}
+                className="post__dislikeButton"
+              ></ThumbDownOutlinedIcon>
+              <span className="badge" style={{ fontSize: "small" }}>
+                {disLikesLength}{" "}
+              </span>
+            </Button>
+
+            {/* --------------------------dislike button and input End*/}
           </CardLink>
           <CardLink>
             <Button
@@ -180,7 +187,12 @@ function Post({ username, user, postId, caption, imageUrl, profileUrl }) {
               Comments
             </Button>
           </CardLink>
-
+          <div></div>
+          <div>
+            {disLikes.map((disLike) => (
+              <p>{disLike.text}</p>
+            ))}
+          </div>
           <div>
             <UncontrolledCollapse toggler="#toggler">
               <form>
@@ -193,11 +205,9 @@ function Post({ username, user, postId, caption, imageUrl, profileUrl }) {
                   onChange={(e) => setComment(e.target.value)}
                 />
                 <button
-                  type="submit"
                   style={{ display: "none" }}
-                  className="inline-block"
+                  className="inline-block post__button"
                   disabled={!comment}
-                  className="post__button"
                   type="submit"
                   onClick={postComment}
                 >

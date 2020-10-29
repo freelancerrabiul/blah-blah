@@ -1,13 +1,10 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import Button from "@material-ui/core/Button";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import { makeStyles } from "@material-ui/core/styles";
 import { db, storage } from "./firebase";
 import firebase from "firebase";
-
-
-
 
 // --------progresbar from meterial ui----------------
 import PropTypes from "prop-types";
@@ -23,16 +20,13 @@ import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
 // --------------
 import { useStateValue } from "./StateProvider";
 
-
 const MyModal = (props) => {
   const [image, setImage] = useState(null);
   const [{ user }] = useStateValue();
-  const email = user?.email; 
+  const email = user?.email;
+
   const [progress, setProgress] = useState(0);
   const [caption, setCaption] = useState("");
-
-
-
 
   // ----------------------meterial ui progressbar----------------------------------------------------
 
@@ -59,9 +53,6 @@ const MyModal = (props) => {
     value: PropTypes.number.isRequired,
   };
 
-
-
-
   // --------------------------------------------------------------------------
 
   // modal file upload logic-------meterial ui------
@@ -84,16 +75,31 @@ const MyModal = (props) => {
       setImage(e.target.files[0]);
     }
   };
-  // modal file upload logic end-------------
+
+  const [postOwner, setPostOwner] = useState([])
+  db.collection("users")
+  .where("email", "==", `${email}`)
+  .get()
+  .then(snap => {
+    snap.forEach(doc => {
+      setPostOwner(doc.data().profilePic);
+    });
+})
+.catch(function(error) {
+    console.log("Error getting documents: ", error);
+});
+  // 
+
+
+  
   const { className } = props;
 
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-
-// My file ---sending to db ---------------------
-  const handleUpload = () => {
+  // My file ---sending to db ---------------------
+  const handleUpload = () => {   
     const uploadTask = storage.ref(`postPhotos/${image.name}`).put(image);
     //  the progress bar--->
     uploadTask.on(
@@ -123,11 +129,13 @@ const MyModal = (props) => {
               caption: caption,
               imageUrl: url,
               username: email,
+              profileOwner: postOwner
+   
             });
             setProgress(0);
             setCaption("");
             setImage(null);
-            setModal(false)
+            setModal(false);
           });
       }
     );
@@ -207,7 +215,6 @@ const MyModal = (props) => {
           </Button>
         </ModalFooter>
       </Modal>
-      
     </div>
   );
 };

@@ -9,11 +9,11 @@ function Feed() {
   // belong to posts
   const [posts, setPosts] = useState([]);
   const [{ user }] = useStateValue();
-  const [profile, setProfile ] = useState([]);
+
   const email = user?.email;
   // snatching post data from db and giving it to post.js as props
   useEffect(() => {
-    db.collection("posts").onSnapshot((snapshot) => {
+    db.collection("posts").orderBy('timestamp','desc').onSnapshot((snapshot) => {
       setPosts(
         snapshot.docs.map((doc) => ({
           id: doc.id,
@@ -24,17 +24,10 @@ function Feed() {
   }, []);
   // ------------------end--->
 
-  
+
   // -------getting the profile pic of user from db----
 
-  useEffect(() => {
-    db.collection("users")
-      .doc(`${email}`)
-      .get()
-      .then((doc) => {
-        setProfile(doc.data())
-      });
-  }, [email]);
+
   // -------getting the profile pic of user end----
   return (
     <div className="container">
@@ -58,7 +51,7 @@ function Feed() {
           </div>
           {posts.map(({ id, post }) => (
             <Post
-             profileUrl={profile?.profilePic}
+              profileUrl={post.profileOwner}
               key={id}
               postId={id}
               user={email}
