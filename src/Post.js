@@ -36,40 +36,9 @@ function Post({ username, user, postId, caption, imageUrl, profileUrl }) {
   let likesLength = likes.length;
   let disLikesLength = disLikes.length;
   // --------making comments handliner in db start--
-  useEffect(() => {
-    let unsubscribe;
-    if (postId) {
-      unsubscribe = db
-        .collection("posts")
-        .doc(postId)
-        .collection("comments")
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snapshot) => {
-          setComments(snapshot.docs.map((doc) => doc.data()));
-        });
-    }
-    return () => {
-      unsubscribe();
-    };
-  }, [postId]);
+  
 
-  useEffect(() => {
-    let unsubscribe;
-    if (postId) {
-      unsubscribe = db
-        .collection("posts")
-        .doc(postId)
-        .collection("likes")
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snapshot) => {
-          setLikes(snapshot.docs.map((doc) => doc.data()));
-        });
-    }
-    return () => {
-      unsubscribe();
-    };
-  }, [postId]);
-
+ 
   useEffect(() => {
     let unsubscribe;
     if (postId) {

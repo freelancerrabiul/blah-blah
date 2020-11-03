@@ -1,4 +1,39 @@
 .bg-custom {
-    background-image: linear-gradient(-15deg, #13547a 10%, #80d0c7 90%) !important;
- 
+  background-image: linear-gradient(
+    -15deg,
+    #13547a 10%,
+    #80d0c7 90%
+  ) !important;
+}
+
+.MuiSvgIcon-root:hover {
+}
+
+.header__fab {
+  background: #bc4e9c; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #f80759,
+    #bc4e9c
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #f80759,
+    #bc4e9c
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+a:link {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:visited {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+button:focus {
+  border-bottom: 1px solid black;
 }

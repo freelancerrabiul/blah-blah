@@ -1,0 +1,18 @@
+.notify__text{
+    font-size: xx-small;
+    word-spacing: -1px;
+    text-align: left;
+}
+
+.notify__button {
+    height: 10px;
+    text-align: center;
+    font-size:small;
+}
+.cards__img {
+    object-fit: cover;
+}
+.notify__modifiedButton:hover{
+   color: white !important;
+   background: #27a843 !important;
+}

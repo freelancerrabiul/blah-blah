@@ -43,6 +43,7 @@ const MyModal = (props) => {
         </Box>
       </Box>
     );
+    
   }
 
   LinearProgressWithLabel.propTypes = {
@@ -167,7 +168,7 @@ const MyModal = (props) => {
           Start a Post
         </span>
       </Button>
-      <Modal isOpen={modal} fade={false} toggle={toggle} className={className}>
+      <Modal style={{marginTop:"100px"}} isOpen={modal} fade={false} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>{email}</ModalHeader>
         <ModalBody>
           <textarea

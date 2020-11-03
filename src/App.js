@@ -15,6 +15,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ProfileInfo from "./ProfileInfo";
 import Explore from "./Explore";
 import Header from "./Header";
+import Notify from "./Notify";
+import MyConnection from "./MyConnection";
+
 
 function App() {
   const [{ user }, dispatch] = useStateValue();
@@ -39,7 +42,8 @@ function App() {
   return (
     <Router>
       <div className="app">
-        <Header />
+      <Header/>
+
         <Switch>
           <Route exact path="/feed">
             <Feed />
@@ -57,9 +61,21 @@ function App() {
             <Explore />
           </Route>
 
+          
+          <Route exact path="/notification">
+            <Notify />
+          </Route>
+
+          <Route path="/connection">
+            <MyConnection />
+          </Route>
+
+
           <Route exact path="/">
             {user ? <Redirect to="/feed" /> : <Login />}
           </Route>
+
+          
         </Switch>
       </div>
     </Router>

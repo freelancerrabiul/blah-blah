@@ -12,21 +12,26 @@ function Feed() {
 
   const email = user?.email;
   // snatching post data from db and giving it to post.js as props
+
   useEffect(() => {
-    db.collection("posts").orderBy('timestamp','desc').onSnapshot((snapshot) => {
-      setPosts(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          post: doc.data(),
-        }))
-      );
-    });
-  }, []);
+    if (setPosts) {
+      db.collection("posts")
+        .orderBy("timestamp", "desc")
+        .onSnapshot((snapshot) => {
+          setPosts(
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              post: doc.data(),
+            }))
+          );
+        });
+    }else{
+      console.log("USeEffect from Feed.js-->29");
+    }
+  }, [setPosts]);
   // ------------------end--->
 
-
   // -------getting the profile pic of user from db----
-
 
   // -------getting the profile pic of user end----
   return (
@@ -35,14 +40,14 @@ function Feed() {
         <div
           className="        
           mt-sm-5 mt-md-5 mt-lg-5 mt-xl-5
-          pt-sm-5 pt-md-5 pt-lg-5 pt-xl-5 
+          pt-sm-1 pt-md-1 pt-lg-1 pt-xl-1
           col-sm-10 col-md-10 col-lg-10 col-xl-10 
           offset-sm-1 offset-md-1 offset-lg-1 offset-xl-1        
           "
         >
           <div
             className="        
-         
+
           col-sm-10 col-md-10 col-lg-10 col-xl-10
           offset-sm-1 offset-md-1 offset-lg-1 offset-xl-1        
           "

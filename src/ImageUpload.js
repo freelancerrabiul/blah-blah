@@ -13,11 +13,11 @@ function ImageUpload() {
 
 
   return (
-    <div className="image__upload">
+    <div className="image__upload " >
       <Col className=" col-sm-12 col-md-12 col-lg-12 col-xl-12  offset-sm-12 offset-md-12 offset-lg-12 offset-xl-12 ">
         <Card>
           <CardHeader>
-            <MyModal />
+            <MyModal/>
           </CardHeader>
           <CardBody>
             <CardText>

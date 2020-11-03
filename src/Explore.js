@@ -12,16 +12,21 @@ function Explore() {
   const [peoples, setPeoples] = useState([]);
 
   useEffect(() => {
-    db.collection("users").onSnapshot((snapshot) => {
-      setPeoples(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          people: doc.data(),
-        }))
-      );
-    });
-  }, []);
-// console.log(peoples);
+    if(peoples){
+      db.collection("users").onSnapshot((snapshot) => {
+        setPeoples(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            people: doc.data(),
+          }))
+        );
+      });
+    }else{
+      console.log("not yet...");
+    }
+   
+  }, [peoples]);
+
   let peopleLength = peoples.length;
   if (peopleLength) {
     return (
@@ -42,6 +47,7 @@ function Explore() {
         </div>
       </div>
     );
+
   } else {
     return (
       <div class="loader">
