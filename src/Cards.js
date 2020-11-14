@@ -30,7 +30,7 @@ const Cards = ({ email, firstname, lastname, about, profilePic }) => {
     }
   }, [mainUser]);
 
-  // console.log(mainUserProfileInfo.profilePic);
+  // console.log(mainUserProfileInfo);
 
   const sendDataToMyConnection = (event) => {
     event.preventDefault();

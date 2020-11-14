@@ -108,20 +108,46 @@ function Notify() {
   const [other, setOther] = useState("");
   const [checkOthersProfilePicUrl, setCheckOthersProfilePicUrl] = useState("");
 
+  const [myProfileLink, setMyProfileLink] = useState([]);
+  useEffect(() => {
+    if (mainUser) {
+      db.collection("users")
+        .doc(mainUser)
+        .get()
+        .then((doc) => {
+          setMyProfileLink(doc.data().profilePic);
+        });
+    } else {
+      console.log("not yet...");
+    }
+  }, [mainUser]);
+
+  // console.log(myProfileLink);
+
   const handleAccept = (e) => {
     e.preventDefault();
     var otherUser = other.includes(checkUser);
     if (otherUser === true) {
       db.collection("users")
         .doc(mainUser)
-        .collection("my_connection")
+        .collection("my_connections")
         .doc(checkUser)
         .set({
-          friendName: mainUser,
+          friendName: checkUser,
           profileLink: checkOthersProfilePicUrl,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         })
         .then(function () {
+          db.collection("users")
+            .doc(checkUser)
+            .collection("my_connections")
+            .doc(mainUser)
+            .set({
+              friendName: mainUser,
+              profileLink: myProfileLink,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
           console.log("Document successfully added!");
         })
         .catch(function (error) {
@@ -206,7 +232,6 @@ function Notify() {
                         onMouseOver={(e) =>
                           setCheckOthersProfilePicUrl(e.target.value)
                         }
-                      
                         value={person.profileLink}
                       ></button>
                     </Button>

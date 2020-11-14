@@ -33,7 +33,3 @@ a:visited {
   background-color: transparent;
   text-decoration: none;
 }
-
-button:focus {
-  border-bottom: 1px solid black;
-}

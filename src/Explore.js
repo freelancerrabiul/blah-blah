@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
-
 import Cards from "./Cards";
 import { db } from "./firebase";
 import "./Explore.css";
 
-
-
 function Explore() {
-
- 
   const [peoples, setPeoples] = useState([]);
 
   useEffect(() => {
-    if(peoples){
+    if (peoples) {
       db.collection("users").onSnapshot((snapshot) => {
         setPeoples(
           snapshot.docs.map((doc) => ({
@@ -21,10 +16,9 @@ function Explore() {
           }))
         );
       });
-    }else{
+    } else {
       console.log("not yet...");
     }
-   
   }, [peoples]);
 
   let peopleLength = peoples.length;
@@ -47,7 +41,6 @@ function Explore() {
         </div>
       </div>
     );
-
   } else {
     return (
       <div class="loader">
