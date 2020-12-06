@@ -39,70 +39,70 @@ function Notify() {
   }, [mainUser]);
 
   // console.log(length);
-  useEffect(() => {
-    if (timestamp) {
-      timestamp.forEach((time) => setParadox(time));
-    } else {
-      console.log("Operation failed useEffect notify--->43");
-    }
-  }, [timestamp, paradox]);
+  // useEffect(() => {
+  //   if (timestamp) {
+  //     timestamp.forEach((time) => setParadox(time));
+  //   } else {
+  //     console.log("Operation failed useEffect notify--->43");
+  //   }
+  // }, [timestamp, paradox]);
 
-  var convertingToSecond = paradox.seconds;
-  var time = new Date(convertingToSecond * 1000);
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  var months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  // var convertingToSecond = paradox.seconds;
+  // var time = new Date(convertingToSecond * 1000);
+  // const days = [
+  //   "Sunday",
+  //   "Monday",
+  //   "Tuesday",
+  //   "Wednesday",
+  //   "Thursday",
+  //   "Friday",
+  //   "Saturday",
+  // ];
+  // var months = [
+  //   "January",
+  //   "February",
+  //   "March",
+  //   "April",
+  //   "May",
+  //   "June",
+  //   "July",
+  //   "August",
+  //   "September",
+  //   "October",
+  //   "November",
+  //   "December",
+  // ];
 
-  let month = months[time.getMonth()];
-  let date = time.getDate();
-  let day = days[time.getDay()];
-  let hour = time.getHours();
-  let minute = time.getMinutes();
+  // let month = months[time.getMonth()];
+  // let date = time.getDate();
+  // let day = days[time.getDay()];
+  // let hour = time.getHours();
+  // let minute = time.getMinutes();
 
-  let prepand = hour >= 12 ? " PM " : " AM ";
-  hour = hour >= 12 ? hour - 12 : hour;
-  if (hour === 0 && prepand === " PM ") {
-    if (minute === 0) {
-      hour = 12;
-      prepand = " Noon";
-    } else {
-      hour = 12;
-      prepand = " PM";
-    }
-  }
-  if (hour === 0 && prepand === " AM ") {
-    if (minute === 0) {
-      hour = 12;
-      prepand = " Midnight";
-    } else {
-      hour = 12;
-      prepand = " AM";
-    }
-  }
-  if (minute < 10) {
-    minute = "0" + minute;
-  } else {
-  }
+  // let prepand = hour >= 12 ? " PM " : " AM ";
+  // hour = hour >= 12 ? hour - 12 : hour;
+  // if (hour === 0 && prepand === " PM ") {
+  //   if (minute === 0) {
+  //     hour = 12;
+  //     prepand = " Noon";
+  //   } else {
+  //     hour = 12;
+  //     prepand = " PM";
+  //   }
+  // }
+  // if (hour === 0 && prepand === " AM ") {
+  //   if (minute === 0) {
+  //     hour = 12;
+  //     prepand = " Midnight";
+  //   } else {
+  //     hour = 12;
+  //     prepand = " AM";
+  //   }
+  // }
+  // if (minute < 10) {
+  //   minute = "0" + minute;
+  // } else {
+  // }
 
   const [checkUser, setCheckUser] = useState();
   const [other, setOther] = useState("");
@@ -184,8 +184,8 @@ function Notify() {
     <Container className="notify themed-container pt-4" fluid={false}>
       <Container className="notify themed-container " fluid={true}>
         <Row className="p-2" xs="1" sm="2" md="4">
-          {length.map((person) => (
-            <Card className="shadow-lg">
+          {length.map((person, id) => (
+            <Card key={id} person={person} className="shadow-lg">
               <CardImg
                 className="cards__img"
                 top
@@ -252,8 +252,9 @@ function Notify() {
               </CardBody>
 
               <small className="notify__text left p-2 text-muted badge">
-                · {date} {month} {day} {hour}: {minute}
-                {prepand}{" "}
+                {/* · {date} {month} {day} {hour}: {minute}
+                {prepand}{" "} */}
+                {new Date(person.timestamp?.toDate()).toUTCString()}
               </small>
             </Card>
           ))}

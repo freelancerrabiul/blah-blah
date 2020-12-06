@@ -58,6 +58,8 @@ function Feed() {
             <Post
               profileUrl={post.profileOwner}
               key={id}
+
+              
               postId={id}
               user={email}
               username={post.username}

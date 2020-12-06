@@ -2,7 +2,16 @@ import React, { useEffect, useState } from "react";
 import ChatIcon from "@material-ui/icons/Chat";
 import { makeStyles } from "@material-ui/core/styles";
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
-import { Avatar, Button, Divider, FormControl, Input } from "@material-ui/core";
+import {
+  Avatar,
+  Button,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  FormControl,
+  Input,
+} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -11,7 +20,7 @@ import "./ChatModal.css";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import FullscreenExitIcon from "@material-ui/icons/FullscreenExit";
 import FlipMove from "react-flip-move";
-import ChatRoom from "./ChatRoom";
+import OtherMessage from "./OtherMessage";
 
 import {
   Modal,
@@ -22,14 +31,16 @@ import {
 import { db } from "./firebase";
 import firebase from "firebase";
 import { useStateValue } from "./StateProvider";
+import MyMessages from "./MyMessages";
 
 const ModalFocusAfterClose = (props) => {
   const [{ user }] = useStateValue();
   const [open, setOpen] = useState(false);
   const [focusAfterClose, setFocusAfterClose] = useState(true);
 
-  const toggle = () => setOpen(!open);
-
+  const toggle = () => {
+    setOpen(!open);
+  };
   const useStyles = makeStyles((theme) => ({
     root: {
       display: "flex",
@@ -64,22 +75,21 @@ const ModalFocusAfterClose = (props) => {
   };
 
   // Chat Room things
+
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([]);
+
   const mainUser = user?.email;
+  // console.log(messages);
   // Chat Room adding data to database-------start
   const sendMessage = (e) => {
     e.preventDefault();
     if (mainUser) {
-      db.collection("users")
-        .doc(props.name)
-        .collection("messages")
-        .doc(mainUser)
-        .collection(`${mainUser}`)
-        .doc()
-        .set({
+      db.collection("messages")
+        .add({
           message: input,
-          username: mainUser,
+          from: mainUser,
+          to: props.name,
+          sid: `${mainUser}_${props.name}`,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         })
         .then(function () {
@@ -99,48 +109,42 @@ const ModalFocusAfterClose = (props) => {
   // Chat Room things
   // Chat Room grabing data from database
 
-  useEffect(() => {
-    if (props.name) {
-      db.collection("users")
-        .doc(mainUser)
-        .collection("messages")
-        .doc(props.name)
-        .collection(props.name)
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snapshot) => {
-          setMessages(
-            snapshot.docs.map((doc) => ({
-              message: doc.data(),
-            }))
-          );
-        });
-    } else {
-      console.log("oparation failed");
-    }
-  }, [props.name, mainUser]);
+  const [myMessages, setMyMessages] = useState([]);
+  const [otherMessage, setOtherMessage] = useState([]);
 
   useEffect(() => {
-    if (props.name) {
-      db.collection("users")
-        .doc(props.name)
-        .collection("messages")
-        .doc(mainUser)
-        .collection(mainUser)
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snapshot) => {
-          setMessages(
-            snapshot.docs.map((doc) => ({
-              info: doc.data(),
-            }))
-          );
-        });
-    } else {
-      console.log("oparation failed");
-    }
-  }, [props.name, mainUser]);
+    db.collection("messages")
+      .where("sid", "==", `${mainUser}_${props.name}`)
+      .orderBy("timestamp", "desc")
+      .limit(3)
+      .onSnapshot((snapshot) => {
+        setMyMessages(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            message: doc.data(),
+          }))
+        );
+      });
+  }, []);
+
+  useEffect(() => {
+    db.collection("messages")
+      .where("sid", "==", `${props.name}_${mainUser}`)
+      .orderBy("timestamp", "desc")
+      .limit(3)
+      .onSnapshot((snapshot) => {
+        setOtherMessage(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            message: doc.data(),
+          }))
+        );
+      });
+  }, []);
+  // console.log("myMessages---->", myMessages);
+  // console.log("myMessages---->", otherMessage);
 
   // Chat Room grabing data from database
-
   return (
     <div>
       <form inline onSubmit={(e) => e.preventDefault()}>
@@ -219,6 +223,54 @@ const ModalFocusAfterClose = (props) => {
                       <FullscreenExitIcon />
                     </IconButton>
                   </Toolbar>
+                  <DialogTitle id="responsive-dialog-title">
+                    <ModalBody>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div>
+                          <FlipMove>
+                            <IconButton style={{ outlineStyle: "none" }}>
+                              <Avatar>Me</Avatar>
+                            </IconButton>
+                            {myMessages.map(({ id, message }) => (
+                              <MyMessages
+                                key={id}
+                                username={mainUser}
+                                message={message}
+                              />
+                            ))}
+                          </FlipMove>
+                        </div>
+                        <div>
+                          <FlipMove>
+                            <span
+                              style={{
+                                fontSize: "x-small",
+                                color: "grey",
+                                fontWeight: "bolder",
+                              }}
+                            >
+                              <IconButton style={{ outlineStyle: "none" }}>
+                                <Avatar src={props.proPic}></Avatar>
+                              </IconButton>
+                            </span>
+
+                            {otherMessage.map(({ id, message }) => (
+                              <OtherMessage
+                                key={id}
+                                username={mainUser}
+                                message={message}
+                              />
+                            ))}
+                          </FlipMove>
+                        </div>
+                      </div>
+                    </ModalBody>
+                  </DialogTitle>
                 </Dialog>
               </div>
             </div>
@@ -255,7 +307,7 @@ const ModalFocusAfterClose = (props) => {
                   color: "grey",
                 }}
               >
-                Engineer at Sundarban Industrial Complex Limited( Bashundhara
+                Engineer at Sundarban Industrial Complex Limited(Bashundhara
                 Group)
                 <p
                   style={{
@@ -279,16 +331,42 @@ const ModalFocusAfterClose = (props) => {
           onChange={(event) => setInput(event.target.value)}
         />
         <ModalBody>
-          <FlipMove>
-            {messages.map(( message, info, index ) => (
-              <ChatRoom
-                key={index}
-                username={mainUser}
-                info={info}
-                message={message}
-              />
-            ))}
-          </FlipMove>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
+              <FlipMove>
+                <IconButton style={{ outlineStyle: "none" }}>
+                  <Avatar>Me</Avatar>
+                </IconButton>
+
+                {myMessages.map(({ id, message }) => (
+                  <MyMessages key={id} username={mainUser} message={message} />
+                ))}
+              </FlipMove>
+            </div>
+            <div>
+              <FlipMove>
+                <span
+                  style={{
+                    fontSize: "x-small",
+                    color: "grey",
+                    fontWeight: "bolder",
+                  }}
+                >
+                  <IconButton style={{ outlineStyle: "none" }}>
+                    <Avatar src={props.proPic}></Avatar>
+                  </IconButton>
+                </span>
+
+                {otherMessage.map(({ id, message }) => (
+                  <OtherMessage
+                    key={id}
+                    username={mainUser}
+                    message={message}
+                  />
+                ))}
+              </FlipMove>
+            </div>
+          </div>
         </ModalBody>
         <div
           className="p-1"

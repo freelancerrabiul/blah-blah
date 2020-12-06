@@ -158,8 +158,8 @@ function Post({ username, user, postId, caption, imageUrl, profileUrl }) {
           </CardLink>
           <div></div>
           <div>
-            {disLikes.map((disLike) => (
-              <p>{disLike.text}</p>
+            {disLikes.map((disLike, index) => (
+              <p key={index}>{disLike.text}</p>
             ))}
           </div>
           <div>
@@ -186,7 +186,7 @@ function Post({ username, user, postId, caption, imageUrl, profileUrl }) {
               <Card>
                 <CardBody className="post__comments">
                   {comments.map((comment) => (
-                    <p>
+                    <p key={comment.username}>
                       <strong style={{ fontSize: "small" }}>
                         {comment.username}{" "}
                       </strong>

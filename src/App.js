@@ -18,7 +18,6 @@ import Header from "./Header";
 import Notify from "./Notify";
 import MyConnection from "./MyConnection";
 
-
 function App() {
   const [{ user }, dispatch] = useStateValue();
 
@@ -42,15 +41,11 @@ function App() {
   return (
     <Router>
       <div className="app">
-      <Header/>
+        <Header />
 
         <Switch>
           <Route exact path="/feed">
             <Feed />
-          </Route>
-
-          <Route path="/chat">
-            <Chat />
           </Route>
 
           <Route path="/profile_info">
@@ -61,7 +56,6 @@ function App() {
             <Explore />
           </Route>
 
-          
           <Route exact path="/notification">
             <Notify />
           </Route>
@@ -70,12 +64,9 @@ function App() {
             <MyConnection />
           </Route>
 
-
           <Route exact path="/">
             {user ? <Redirect to="/feed" /> : <Login />}
           </Route>
-
-          
         </Switch>
       </div>
     </Router>

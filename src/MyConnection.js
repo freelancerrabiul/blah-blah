@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import PopupState from "./PopupState";
 import SearchButton from "./SearchButton";
-import { Avatar, Button, Divider } from "@material-ui/core";
+import { Avatar,  Divider } from "@material-ui/core";
 import { deepOrange, deepPurple } from "@material-ui/core/colors";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
@@ -202,8 +202,9 @@ function MyConnection(props) {
             </div>
             <Divider light />
             <ListGroup>
-              {friends.map((friend) => (
+              {friends.map((friend, index) => (
                 <ListGroupItem
+                  key={index}
                   style={{ borderLeft: "none", borderRight: "none" }}
                 >
                   <div
@@ -258,7 +259,6 @@ function MyConnection(props) {
                           name={friend.friendName}
                           proPic={friend.profileLink}
                         />
-
 
                         {/* -------------------------------Modal-------------- */}
 
