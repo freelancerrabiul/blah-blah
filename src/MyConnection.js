@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import PopupState from "./PopupState";
 import SearchButton from "./SearchButton";
-import { Avatar,  Divider } from "@material-ui/core";
+import { Avatar, Divider } from "@material-ui/core";
 import { deepOrange, deepPurple } from "@material-ui/core/colors";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 

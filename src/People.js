@@ -2,7 +2,6 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { db } from "./firebase";
 
-
 function People(props) {
   let history = useHistory();
   const handleClick = () => {

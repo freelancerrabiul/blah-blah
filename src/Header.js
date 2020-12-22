@@ -117,7 +117,7 @@ function Header(props) {
           setLength(snapshot.docs.map((doc) => doc.data()));
         });
     } else {
-  console.log("useEffect from header.js--->120");
+      console.log("useEffect from header.js--->120");
     }
   }, [mainUser]);
   // -------------------------For Notify Items*ENDS*--------------
@@ -197,17 +197,26 @@ function Header(props) {
     >
       <MenuItem> {mainUser} </MenuItem>
 
-
-      <Link style={{color:"black"}} className="text-decoration-none" to="/profile_info">
+      <Link
+        style={{ color: "black" }}
+        className="text-decoration-none"
+        to="/profile_info"
+      >
         <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       </Link>
 
-      <Link style={{color:"black"}} to="/view_profile" className="text-decoration-none">
+      <Link
+        style={{ color: "black" }}
+        to="/view_profile"
+        className="text-decoration-none"
+      >
         <MenuItem>View Profile</MenuItem>
       </Link>
 
       {mainUser ? (
-        <MenuItem style={{color:"black"}} onClick={() => auth.signOut()}>Log out</MenuItem>
+        <MenuItem style={{ color: "black" }} onClick={() => auth.signOut()}>
+          Log out
+        </MenuItem>
       ) : (
         history.push("/")
       )}

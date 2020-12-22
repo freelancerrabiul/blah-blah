@@ -1,44 +1,41 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import "./ChatRoom.css";
 import { Card, CardContent, Typography } from "@material-ui/core";
-const OtherMessage = forwardRef(({ message, username }, ref) => {
-  // console.log("message---------------->", message);
-  const isUser = username !== message.from;
+import { useSpring, animated } from "react-spring";
 
-  if (message) {
-    return (
-      <div ref={ref} className={`message ${isUser && "message__user"}`}>
-        <span
-          style={{
-            fontSize: "x-small",
-            color: "grey",
-            fontWeight: "bolder",
-          }}
-        >
-          {new Date(message.timestamp?.toDate()).toUTCString()}
-        </span>
-        <Card className={isUser ? "message__userCard" : "message__guestCard"}>
-          <CardContent>
-            <Typography
-              style={{
-                fontSize: "x-small",
-                fontWeight: "bold",
-                color: "white",
-              }}
-              color="white"
-              variant="p"
-              component="p"
-            ></Typography>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
-  }
-});
+const OtherMessage = ({ message }) => {
+  const springStyle = useSpring({
+    transform: "translate3d(0,-40px,0)",
+    from: { transform: "translate3d(0,0px,0)" },
+    to: { transform: "translate3d(0,-40px,0)" },
+  });  return (
+    <animated.div className="message__other" style={springStyle}>
+      <span
+        style={{
+          fontSize: "x-small",
+          color: "grey",
+          fontWeight: "bolder",
+        }}
+      >
+        {new Date(message.timestamp?.toDate()).toUTCString()}
+      </span>
+      <Card className="message__otherCard">
+        <CardContent>
+          <Typography
+            style={{
+              fontSize: "x-small",
+              fontWeight: "bold",
+              color: "white",
+            }}
+            color="white"
+            variant="p"
+            component="p"
+          >
+            {message.message}
+          </Typography>
+        </CardContent>
+      </Card>
+    </animated.div>
+  );
+};
 export default OtherMessage;

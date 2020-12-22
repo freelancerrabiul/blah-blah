@@ -1,6 +1,15 @@
 .ChatModal__customModalStyle {
   height: 75vh;
+  width: 90vw;
 }
 .normalStyle {
   height: 50vh;
+  width: 50vw;
+}
+.load_more {
+  border: none;
+  margin-bottom: "40px";
+  font-size :"1em";
+
+
 }

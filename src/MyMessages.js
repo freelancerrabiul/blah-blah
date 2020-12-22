@@ -1,25 +1,39 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import "./ChatRoom.css";
 import { Card, CardContent, Typography } from "@material-ui/core";
-const MyMessages = forwardRef(({ message, username }, ref) => {
-  // console.log("message---------------->", message);
+import { useSpring, animated } from "react-spring";
 
-  const isUser = username !== message.from;
+function MyMessages({ message }) {
+  const springStyle = useSpring({
+    transform: "translate3d(0,-40px,0)",
+    opacity: 1,
+    from: { transform: "translate3d(0,0px,0)", opacity: 0 },
+    to: { transform: "translate3d(0,-40px,0)", opacity: 1 },
+  });
+
   return (
-    <div ref={ref} className={`message ${isUser && "message__user"}`}>
-      <span
-        style={{
-          fontSize: "x-small",
-          color: "grey",
-          fontWeight: "bolder",
-        }}
-      >
-        {new Date(message.timestamp?.toDate()).toUTCString()}
-      </span>
-      <Card className={isUser ? "message__userCard" : "message__guestCard"}>
+    <animated.div style={springStyle} className="message__me">
+      <div style={{ textAlign: "left" }}>
+        <span
+          style={{
+            fontSize: "x-small",
+            color: "grey",
+            fontWeight: "bolder",
+          }}
+        >
+          {new Date(message.timestamp?.toDate()).toUTCString() == "Invalid Date"
+            ? "Loading..."
+            : new Date(message.timestamp?.toDate()).toUTCString()}
+        </span>
+      </div>
+      <Card className="message__myCard">
         <CardContent>
           <Typography
-            style={{ fontSize: "x-small", fontWeight: "bold", color: "white" }}
+            style={{
+              fontSize: "x-small",
+              fontWeight: "bold",
+              color: "white",
+            }}
             color="white"
             variant="p"
             component="p"
@@ -28,7 +42,8 @@ const MyMessages = forwardRef(({ message, username }, ref) => {
           </Typography>
         </CardContent>
       </Card>
-    </div>
+    </animated.div>
   );
-});
+}
+
 export default MyMessages;

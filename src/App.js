@@ -8,7 +8,6 @@ import React, { useEffect } from "react";
 import "./App.css";
 import Login from "./Login";
 import Feed from "./Feed";
-import Chat from "./Chat";
 import { auth } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -44,7 +43,7 @@ function App() {
         <Header />
 
         <Switch>
-          <Route exact path="/feed">
+          <Route  path="/feed">
             <Feed />
           </Route>
 
