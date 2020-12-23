@@ -1,9 +1,9 @@
 import React from "react";
-import "./ChatRoom.css";
 import { Card, CardContent, Typography } from "@material-ui/core";
+import "./ChatRoom.css";
 import { useSpring, animated } from "react-spring";
 
-function MyMessages({ message }) {
+function MyLiveMessage({ message }) {
   const springStyle = useSpring({
     transform: "translate3d(0,-40px,0)",
     opacity: 1,
@@ -11,9 +11,8 @@ function MyMessages({ message }) {
     from: { transform: "translate3d(0,0px,0)", opacity: 0 },
     to: { transform: "translate3d(0,-40px,0)", opacity: 1 },
   });
-
   return (
-    <animated.div style={springStyle} className="message__me">
+    <animated.div style={springStyle} className="myLiveMessage">
       <div style={{ textAlign: "left" }}>
         <span
           style={{
@@ -27,7 +26,7 @@ function MyMessages({ message }) {
             : new Date(message.timestamp?.toDate()).toUTCString()}
         </span>
       </div>
-      <Card className="message__myCard">
+      <Card className="myLiveCard">
         <CardContent>
           <Typography
             style={{
@@ -47,4 +46,4 @@ function MyMessages({ message }) {
   );
 }
 
-export default MyMessages;
+export default MyLiveMessage;

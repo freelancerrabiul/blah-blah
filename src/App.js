@@ -16,6 +16,7 @@ import Explore from "./Explore";
 import Header from "./Header";
 import Notify from "./Notify";
 import MyConnection from "./MyConnection";
+import MyModalBody from "./MyModalBody";
 
 function App() {
   const [{ user }, dispatch] = useStateValue();
@@ -43,7 +44,7 @@ function App() {
         <Header />
 
         <Switch>
-          <Route  path="/feed">
+          <Route path="/feed">
             <Feed />
           </Route>
 
@@ -61,6 +62,10 @@ function App() {
 
           <Route path="/connection">
             <MyConnection />
+          </Route>
+
+          <Route path="/mymodalbody">
+            <MyModalBody />
           </Route>
 
           <Route exact path="/">

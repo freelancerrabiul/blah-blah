@@ -1,13 +1,17 @@
 .message__me,
-.message__other {
+.message__other,
+.myLiveMessage,
+.oLiveMessage {
   color: white;
   text-align: left !important;
   width: fit-content;
 }
 
-.message__myCard {
+.message__myCard,
+.myLiveCard {
   background-color: #0b81ff !important;
 }
-.message__otherCard {
+.message__otherCard,
+.oLiveCard {
   background-color: tomato !important;
 }
